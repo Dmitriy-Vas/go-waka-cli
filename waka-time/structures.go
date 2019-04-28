@@ -156,6 +156,209 @@ type (
 		Type   string  `json:"type"`
 		Time   float64 `json:"time"`
 	}
+
+	Range struct {
+		Date     string `json:"date"`
+		End      int    `json:"end"`
+		Start    int    `json:"start"`
+		Text     string `json:"text"`
+		Timezone string `json:"timezone"`
+	}
+
+	Goals struct {
+		Data []struct {
+			AverageStatus string `json:"average_status"`
+			Chart         struct {
+				ActualSeconds     float64 `json:"actual_seconds"`
+				ActualSecondsText string  `json:"actual_seconds_text"`
+				GoalSeconds       int     `json:"goal_seconds"`
+				GoalSecondsText   string  `json:"goal_seconds_text"`
+				Range             Range   `json:"range"`
+				RangeStatus       string  `json:"range_status"`
+				RangeStatusReason string  `json:"range_status_reason"`
+			} `json:"char_data"`
+			CumulativeStatus string   `json:"cumulative_status"`
+			Delta            string   `json:"delta"`
+			ID               string   `json:"id"`
+			IgnoreDays       []string `json:"ignore_days"`
+			ImproveByPercent float64  `json:"improve_by_percent"`
+			IsEnabled        bool     `json:"is_enabled"`
+			Languages        []string `json:"languages"`
+			Projects         []string `json:"projects"`
+			RangeText        string   `json:"range_text"`
+			Seconds          int      `json:"seconds"`
+			Status           string   `json:"status"`
+			Subscribers      []struct {
+				Email          string `json:"email"`
+				EmailFrequency string `json:"email_frequency"`
+				FullName       string `json:"full_name"`
+				UserID         string `json:"user_id"`
+				UserName       string `json:"username"`
+			} `json:"subscribers"`
+		} `json:"data"`
+		Total      int `json:"total"`
+		TotalPages int `json:"total_pages"`
+	}
+
+	leadersUser struct {
+		Rank         int `json:"rank"`
+		RunningTotal struct {
+			TotalSeconds              float64 `json:"total_seconds"`
+			HumanReadableTotal        string  `json:"human_readable_format"`
+			DailyAverage              float64 `json:"daily_average"`
+			HumanReadableDailyAverage string  `json:"human_readable_daily_average"`
+			Languages                 []struct {
+				Name         string  `json:"name"`
+				TotalSeconds float64 `json:"total_seconds"`
+			}
+		} `json:"running_total"`
+		User struct {
+			ID                string `json:"id"`
+			Email             string `json:"email"`
+			UserName          string `json:"username"`
+			FullName          string `json:"full_name"`
+			DisplayName       string `json:"display_name"`
+			Site              string `json:"website"`
+			HumanReadableSite string `json:"human_readable_website"`
+			Location          string `json:"location"`
+			EmailPublic       bool   `json:"email_public"`
+			PhotoPublic       bool   `json:"photo_public"`
+		} `json:"user"`
+	}
+
+	Leaders struct {
+		CurrentUser leadersUser   `json:"current_user"`
+		Data        []leadersUser `json:"data"`
+		Page        int           `json:"page"`
+		TotalPages  int           `json:"total_pages"`
+		Range       struct {
+			StartDate string `json:"start_date"`
+			StartText string `json:"start_text"`
+			EndDate   string `json:"end_date"`
+			EndText   string `json:"end_text"`
+			Name      string `json:"name"`
+			Text      string `json:"text"`
+		} `json:"range"`
+		Language   string    `json:"language"`
+		ModifiedAt time.Time `json:"modified_at"`
+		Timeout    int       `json:"timeout"`
+		WritesOnly bool      `json:"writes_only"`
+	}
+
+	Meta struct {
+		Data struct {
+			IPs struct {
+				API     []string `json:"api"`
+				Website []string `json:"website"`
+				Worker  []string `json:"worker"`
+			} `json:"ips"`
+		} `json:"data"`
+	}
+
+	OrgDashboards struct {
+		Data []struct {
+			ID                          string    `json:"id"`
+			FullName                    string    `json:"full_name"`
+			CreatedBy                   string    `json:"created_by"`
+			Timezone                    string    `json:"timezone"`
+			HasChangedTImezone          bool      `json:"has_changed_timezone"`
+			MembersCount                int       `json:"members_count"`
+			MembersCountHumanReadable   string    `json:"members_count_human_readable"`
+			IsCurrentUserMember         bool      `json:"is_current_user_member"`
+			CanCurrentUserView          bool      `json:"can_current_user_view"`
+			CanCurrentUserRequestToView bool      `json:"can_current_user_request_to_view"`
+			CanCUrrentUserRequestToJoin bool      `json:"can_current_user_request_to_join"`
+			CanCurrentUserAddMembers    bool      `json:"can_current_user_add_members"`
+			CanCurrentUserRemoveMember  bool      `json:"can_current_user_remove_members"`
+			CanCurrentUserDelete        bool      `json:"can_current_user_delete"`
+			CreatedAt                   time.Time `json:"created_at"`
+			ModifiedAt                  time.Time `json:"modified_at"`
+		}
+		NextPage   int `json:"next_page"`
+		Page       int `json:"page"`
+		PrevPage   int `json:"prev_page"`
+		Total      int `json:"total"`
+		TotalPages int `json:"total_pages"`
+	}
+
+	Orgs struct {
+		Data []struct {
+			ID                                       string    `json:"id"`
+			Name                                     string    `json:"name"`
+			DefaultProjectPrivacy                    string    `json:"default_project_privacy"`
+			InvitedPeopleCount                       int       `json:"invited_people_count"`
+			InvitedPeopleCountHumanReadable          string    `json:"invited_people_count_human_readable"`
+			IsDurationVisible                        bool      `json:"is_duration_visible"`
+			PeopleCount                              int       `json:"people_count"`
+			PeopleCountHumanReadable                 string    `json:"people_count_human_readable"`
+			Timeout                                  int       `json:"timeout"`
+			Timezone                                 int       `json:"timezone"`
+			WritesOnly                               int       `json:"writes_only"`
+			CanCurrentUserListDashboards             bool      `json:"can_current_user_list_dashboards"`
+			CanCurrentUserCreateDashboards           bool      `json:"can_current_user_create_dashboards"`
+			CanCurrentUserDisplayCodingOnDashboards  bool      `json:"can_current_user_display_coding_on_dashboards"`
+			CanCurrentUserViewAllDashboards          bool      `json:"can_current_user_view_all_dashboards"`
+			CanCurrentUserAddPeopleToDashboards      bool      `json:"can_current_user_add_people_to_dashboards"`
+			CanCurrentUserRemovePeopleFromDashboards bool      `json:"can_current_user_remove_people_from_dashboards"`
+			CanCurrentUserEditAndDeleteDashboards    bool      `json:"can_current_user_edit_and_delete_dashboards"`
+			CanCurrentUserAddPeopleToOrg             bool      `json:"can_current_user_add_people_to_org"`
+			CanCurrentUserRemovePeopleFromOrg        bool      `json:"can_current_user_remove_people_from_org"`
+			CanCurrentUserManageGroups               bool      `json:"can_current_user_manage_groups"`
+			CanCurrentUserViewAuditLog               bool      `json:"can_current_user_view_audit_log"`
+			CanCurrentUserEditOrg                    bool      `json:"can_current_user_edit_org"`
+			CanCurrentUserManageBilling              bool      `json:"can_current_user_manage_billing"`
+			CanCurrentUserDeleteOrg                  bool      `json:"can_current_user_delete_org"`
+			CreatedAt                                time.Time `json:"created_at"`
+			ModifiedAt                               time.Time `json:"modified_at"`
+		} `json:"data"`
+		NextPage   int `json:"next_page"`
+		Page       int `json:"page"`
+		PrevPage   int `json:"prev_page"`
+		Total      int `json:"total"`
+		TotalPages int `json:"total_pages"`
+	}
+
+	OrgDashboardMembers struct {
+		Data []struct {
+			ID         string `json:"id"`
+			Email      string `json:"email"`
+			FullName   string `json:"full_name"`
+			IsViewOnly bool   `json:"is_view_only"`
+			Photo      string `json:"photo"`
+			Username   string `json:"username"`
+		}
+		NextPage   int `json:"next_page"`
+		Page       int `json:"page"`
+		PrevPage   int `json:"prev_page"`
+		Total      int `json:"total"`
+		TotalPages int `json:"total_pages"`
+	}
+
+	OrgDashboardMemberSummariesStat struct {
+		Name         string  `json:"name"`
+		TotalSeconds float64 `json:"total_seconds"`
+		Percent      float64 `json:"percent"`
+		Digital      string  `json:"digital"`
+		Text         string  `json:"text"`
+		Hours        int     `json:"hours"`
+		Minutes      int     `json:"minutes"`
+		Seconds      int     `json:"seconds"`
+	}
+
+	OrgDashboardMemberSummaries struct {
+		Data []struct {
+			GrandTotal       OrgDashboardMemberSummariesStat   `json:"grand_total"`
+			Projects         []OrgDashboardMemberSummariesStat `json:"projects"`
+			Languages        []OrgDashboardMemberSummariesStat `json:"languages"`
+			Editors          []OrgDashboardMemberSummariesStat `json:"editors"`
+			OperatingSystems []OrgDashboardMemberSummariesStat `json:"operating_systems"`
+			Branches         []OrgDashboardMemberSummariesStat `json:"branches"`
+			Entities         []OrgDashboardMemberSummariesStat `json:"entities"`
+			Range            Range                             `json:"struct"`
+			Start            int                               `json:"start"`
+			End              int                               `json:"end"`
+		}
+	}
 )
 
 func (d *Data) format() string {
