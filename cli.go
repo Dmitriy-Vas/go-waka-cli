@@ -1,4 +1,4 @@
-package api
+package go_waka_api
 
 import (
 	"bytes"

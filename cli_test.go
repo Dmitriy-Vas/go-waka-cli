@@ -1,7 +1,6 @@
 package go_waka_api
 
 import (
-	waka "./waka-time"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -15,7 +14,7 @@ type Config struct {
 
 var (
 	config Config
-	client *waka.WakaClient
+	client *WakaClient
 )
 
 // Для начала создайте файл config.json
@@ -35,7 +34,7 @@ func init() {
 		fmt.Println(err)
 	}
 	// Создаём новый инстанс API
-	client = waka.New(config.Token)
+	client = New(config.Token)
 }
 
 func TestCommits(t *testing.T) {
@@ -46,7 +45,7 @@ func TestCommits(t *testing.T) {
 }
 
 func TestDurations(t *testing.T) {
-	date := &waka.Data{Day: 29, Month: 04, Year: 2019}
+	date := &Data{Day: 29, Month: 04, Year: 2019}
 	_, err := client.Durations(date)
 	if err != nil {
 		t.Fatal(err)
@@ -61,7 +60,7 @@ func TestGoals(t *testing.T) {
 }
 
 func TestHeartbeats(t *testing.T) {
-	date := &waka.Data{Day: 29, Month: 04, Year: 2019}
+	date := &Data{Day: 29, Month: 04, Year: 2019}
 	_, err := client.Heartbeats(date)
 	if err != nil {
 		t.Fatal(err)
@@ -69,8 +68,8 @@ func TestHeartbeats(t *testing.T) {
 }
 
 func TestHeartbeatPost(t *testing.T) {
-	heartbeat := &waka.Heartbeat{
-		Entity:       "D:/Projects/go-waka-api/waka-time/structures.go",
+	heartbeat := &Heartbeat{
+		Entity:       "D:/Projects/go-waka-api/.-time/structures.go",
 		Type:         "file",
 		Category:     "coding",
 		Time:         float64(time.Now().Unix()),
@@ -103,8 +102,8 @@ func TestMeta(t *testing.T) {
 
 // Untested
 /*func TestOrgDashboardMemberSummaries(t *testing.T) {
-	start := &waka.Data{Day: 21, Month: 04, Year: 2019}
-	end := &waka.Data{Day: 29, Month: 04, Year: 2019}
+	start := &..Data{Day: 21, Month: 04, Year: 2019}
+	end := &..Data{Day: 29, Month: 04, Year: 2019}
 	_, err := client.OrgDashboardMemberSummaries("some-org", "some-dash", "some-member", start, end)
 	if err != nil {
 		t.Fatal(err)
@@ -157,15 +156,15 @@ func TestProjects(t *testing.T) {
 }
 
 func TestStats(t *testing.T) {
-	_, err := client.Stats(waka.RANGE_7_DAYS)
+	_, err := client.Stats(RANGE_7_DAYS)
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
 func TestSummaries(t *testing.T) {
-	start := &waka.Data{Day: 21, Month: 04, Year: 2019}
-	end := &waka.Data{Day: 29, Month: 04, Year: 2019}
+	start := &Data{Day: 21, Month: 04, Year: 2019}
+	end := &Data{Day: 29, Month: 04, Year: 2019}
 	_, err := client.Summaries(start, end)
 	if err != nil {
 		t.Fatal(err)
