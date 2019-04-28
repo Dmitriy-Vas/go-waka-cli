@@ -94,7 +94,64 @@ type (
 	}
 
 	Commits struct {
-		// todo add commits
+		Commits []struct {
+			AuthorAvatarURL               string    `json:"author_avatar_url"`
+			AuthorDate                    time.Time `json:"author_date"`
+			AuthorEmail                   string    `json:"author_email"`
+			AuthorHtmlUrl                 string    `json:"author_html_url"`
+			AuthorName                    string    `json:"author_name"`
+			AuthorURL                     string    `json:"author_url"`
+			AuthorUsername                string    `json:"author_username"`
+			CommitterAvatarURL            string    `json:"committer_avatar_url"`
+			CommitterDate                 time.Time `json:"committer_date"`
+			CommiterEmail                 string    `json:"committer_email"`
+			CommiterHtmlUrl               string    `json:"committer_html_url"`
+			CommiterName                  string    `json:"committer_name"`
+			CommiterURL                   string    `json:"committer_url"`
+			CommiterUsername              string    `json:"committer_username"`
+			CreatedAt                     time.Time `json:"created_at"`
+			Hash                          string    `json:"hash"`
+			HtmlUrl                       string    `json:"html_url"`
+			HumanReadableTotal            string    `json:"human_readable_total"`
+			HumanReadableTotalWithSeconds string    `json:"human_readable_total_with_seconds"`
+			ID                            string    `json:"id"`
+			Message                       string    `json:"message"`
+			Reference                     string    `json:"ref"`
+			TotalSeconds                  float64   `json:"total_seconds"`
+			TruncatedHash                 string    `json:"truncated_hash"`
+			URL                           string    `json:"url"`
+		} `json:"commits"`
+		Author      string `json:"author"`
+		NextPage    int    `json:"next_page"`
+		NextPageURL string `json:"next_page_url"`
+		Page        int    `json:"page"`
+		PrevPage    int    `json:"prev_page"`
+		PrevPageURL string `json:"prev_page_url"`
+		Project     struct {
+			ID         string `json:"id"`
+			Name       string `json:"name"`
+			Privacy    string `json:"privacy"`
+			Repository struct {
+				DefaultBranch string    `json:"default_branch"`
+				Description   string    `json:"description"`
+				ForkCount     int       `json:"fork_count"`
+				FullName      string    `json:"full_name"`
+				Homepage      string    `json:"homepage"`
+				HtmlUrl       string    `json:"html_url"`
+				ID            string    `json:"id"`
+				IsFork        bool      `json:"is_fork"`
+				IsPrivate     bool      `json:"is_private"`
+				LastSyncedAt  time.Time `json:"last_synced_at"`
+				Name          string    `json:"name"`
+				Provider      string    `json:"provider"`
+				StarCount     int       `json:"star_count"`
+				URL           string    `json:"url"`
+				WatchCount    int       `json:"watch_count"`
+			} `json:"repository"`
+		} `json:"project"`
+		Status     string `json:"status"`
+		Total      int    `json:"total"`
+		TotalPages int    `json:"total_pages"`
 	}
 
 	// Активность пользователя на выбранный день
@@ -505,6 +562,18 @@ type (
 		} `json:"data"`
 		End   time.Time `json:"end"`
 		Start time.Time `json:"start"`
+	}
+
+	UserAgents struct {
+		Data []struct {
+			CreatedAt time.Time `json:"created_at"`
+			Editor    string    `json:"editor"`
+			ID        string    `json:"id"`
+			LastSeen  time.Time `json:"last_seen"`
+			OS        string    `json:"os"`
+			Value     string    `json:"value"`
+			Version   string    `json:"version"`
+		}
 	}
 )
 
