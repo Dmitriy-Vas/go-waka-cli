@@ -25,7 +25,7 @@ func TestWakaStats(t *testing.T) {
 
 	client := waka.New(cfg.Token)
 
-	stats, err := client.Stats(waka.RANGE_7_DAYS)
+	stats, err := client.Summaries(&waka.Data{Day: 25, Month: 04, Year: 2019}, &waka.Data{Day: 29, Month: 04, Year: 2019})
 	if err != nil {
 		t.Fatal(err)
 	}

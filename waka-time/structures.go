@@ -425,16 +425,17 @@ type (
 
 	Stats struct {
 		Data struct {
-			TotalSeconds              float64 `json:"total_seconds"`
-			HumanReadableTotal        string  `json:"human_readable_total"`
-			DailyAverage              float64 `json:"daily_average"`
-			HumanReadableDailyAverage string  `json:"human_readable_daily_average"`
-			Projects                  []Stat  `json:"projects"`
-			Languages                 []Stat  `json:"languages"`
-			Editors                   []Stat  `json:"editors"`
-			OperatingSystems          []Stat  `json:"operating_systems"`
-			Dependencies              []Stat  `json:"dependencies"`
-			Machines                  []struct {
+			TotalSeconds                       float64 `json:"total_seconds"`
+			TotalSecondsIncludingOtherLanguage float64 `json:"total_seconds_including_other_language"`
+			HumanReadableTotal                 string  `json:"human_readable_total"`
+			DailyAverage                       float64 `json:"daily_average"`
+			HumanReadableDailyAverage          string  `json:"human_readable_daily_average"`
+			Projects                           []Stat  `json:"projects"`
+			Languages                          []Stat  `json:"languages"`
+			Editors                            []Stat  `json:"editors"`
+			OperatingSystems                   []Stat  `json:"operating_systems"`
+			Dependencies                       []Stat  `json:"dependencies"`
+			Machines                           []struct {
 				Machine struct {
 					CreatedAt  time.Time `json:"created_at"`
 					ID         string    `json:"id"`
@@ -450,6 +451,7 @@ type (
 				Text         string  `json:"text"`
 				TotalSeconds float64 `json:"total_seconds"`
 			} `json:"best_day"`
+			Project                 string    `json:"project"`
 			Range                   string    `json:"range"`
 			Holidays                int       `json:"holidays"`
 			DaysIncludingHolidays   int       `json:"days_including_holidays"`
@@ -470,6 +472,39 @@ type (
 			CreatedAt               time.Time `json:"created_at"`
 			ModifiedAt              time.Time `json:"modified_at"`
 		} `json:"data"`
+	}
+
+	Summaries struct {
+		Data []struct {
+			Categories   []Stat `json:"categories"`
+			Dependencies []Stat `json:"dependencies"`
+			Editors      []Stat `json:"editors"`
+			GrandTotal   struct {
+				Digital      string  `json:"digital"`
+				Hours        int     `json:"hours"`
+				Minutes      int     `json:"minutes"`
+				Text         string  `json:"text"`
+				TotalSeconds float64 `json:"total_seconds"`
+			} `json:"grand_total"`
+			Languages []Stat `json:"languages"`
+			Machines  []struct {
+				MachineNameID string `json:"machine_name_id"`
+				Stat
+			} `json:"machines"`
+			OperatingSystems []Stat `json:"operating_systems"`
+			Projects         []Stat `json:"projects"`
+			Branches         []Stat `json:"branches"`
+			Entities         []Stat `json:"entities"`
+			Range            struct {
+				Date     string    `json:"date"`
+				End      time.Time `json:"end"`
+				Start    time.Time `json:"start"`
+				Text     string    `json:"text"`
+				Timezone string    `json:"timezone"`
+			} `json:"range"`
+		} `json:"data"`
+		End   time.Time `json:"end"`
+		Start time.Time `json:"start"`
 	}
 )
 
