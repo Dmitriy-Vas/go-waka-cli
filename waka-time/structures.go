@@ -359,6 +359,65 @@ type (
 			End              int                               `json:"end"`
 		}
 	}
+
+	PrivateLeaderboards struct {
+		Data []struct {
+			CanDelete                 bool      `json:"can_delete"`
+			CanEdit                   bool      `json:"can_edit"`
+			CreatedAt                 time.Time `json:"created_at"`
+			HasAvailableSeat          bool      `json:"has_available_seat"`
+			ID                        string    `json:"id"`
+			MembersCount              int       `json:"members_count"`
+			MembersWithTimezonesCount int       `json:"members_with_timezones_count"`
+			ModifiedAt                time.Time `json:"modified_at"`
+			Name                      string    `json:"name"`
+			TimeRange                 string    `json:"time_range"`
+		}
+		Total      int `json:"total"`
+		TotalPages int `json:"total_pages"`
+	}
+
+	PrivateLeaderboardsLeaders struct {
+		Data []struct {
+			Rank         int `json:"rank"`
+			RunningTotal struct {
+				TotalSeconds              float64 `json:"total_seconds"`
+				HumanReadableTotal        string  `json:"human_readable_total"`
+				DailyAverage              float64 `json:"daily_average"`
+				HumanReadableDailyAverage string  `json:"human_readable_daily_average"`
+				Languages                 []struct {
+					Name         string  `json:"name"`
+					TotalSeconds float64 `json:"total_seconds"`
+				} `json:"languages"`
+			} `json:"running_total"`
+			User struct {
+				ID                   string `json:"id"`
+				Email                string `json:"email"`
+				Username             string `json:"username"`
+				FullName             string `json:"full_name"`
+				DisplayName          string `json:"display_name"`
+				Website              string `json:"website"`
+				HumanReadableWebsite string `json:"human_readable_website"`
+				Location             string `json:"location"`
+				EmailPublic          bool   `json:"email_public"`
+				PhotoPublic          bool   `json:"photo_public"`
+			} `json:"user"`
+			Language   int       `json:"language"`
+			ModifiedAt time.Time `json:"modified_at"`
+			Page       int       `json:"page"`
+			Range      struct {
+				StartDate int    `json:"start_date"`
+				StartText string `json:"start_text"`
+				EndDate   int    `json:"end_date"`
+				EndText   string `json:"end_text"`
+				Name      string `json:"name"`
+				Text      string `json:"text"`
+			} `json:"range"`
+			Timeout    int  `json:"timeout"`
+			TotalPages int  `json:"total_pages"`
+			WritesOnly bool `json:"writes_only"`
+		}
+	}
 )
 
 func (d *Data) format() string {
