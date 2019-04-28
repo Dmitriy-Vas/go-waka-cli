@@ -334,7 +334,7 @@ type (
 		TotalPages int `json:"total_pages"`
 	}
 
-	OrgDashboardMemberSummariesStat struct {
+	Stat struct {
 		Name         string  `json:"name"`
 		TotalSeconds float64 `json:"total_seconds"`
 		Percent      float64 `json:"percent"`
@@ -347,16 +347,16 @@ type (
 
 	OrgDashboardMemberSummaries struct {
 		Data []struct {
-			GrandTotal       OrgDashboardMemberSummariesStat   `json:"grand_total"`
-			Projects         []OrgDashboardMemberSummariesStat `json:"projects"`
-			Languages        []OrgDashboardMemberSummariesStat `json:"languages"`
-			Editors          []OrgDashboardMemberSummariesStat `json:"editors"`
-			OperatingSystems []OrgDashboardMemberSummariesStat `json:"operating_systems"`
-			Branches         []OrgDashboardMemberSummariesStat `json:"branches"`
-			Entities         []OrgDashboardMemberSummariesStat `json:"entities"`
-			Range            Range                             `json:"struct"`
-			Start            int                               `json:"start"`
-			End              int                               `json:"end"`
+			GrandTotal       Stat   `json:"grand_total"`
+			Projects         []Stat `json:"projects"`
+			Languages        []Stat `json:"languages"`
+			Editors          []Stat `json:"editors"`
+			OperatingSystems []Stat `json:"operating_systems"`
+			Branches         []Stat `json:"branches"`
+			Entities         []Stat `json:"entities"`
+			Range            Range  `json:"struct"`
+			Start            int    `json:"start"`
+			End              int    `json:"end"`
 		}
 	}
 
@@ -417,6 +417,59 @@ type (
 			TotalPages int  `json:"total_pages"`
 			WritesOnly bool `json:"writes_only"`
 		}
+	}
+
+	timeRange struct {
+		string
+	}
+
+	Stats struct {
+		Data struct {
+			TotalSeconds              float64 `json:"total_seconds"`
+			HumanReadableTotal        string  `json:"human_readable_total"`
+			DailyAverage              float64 `json:"daily_average"`
+			HumanReadableDailyAverage string  `json:"human_readable_daily_average"`
+			Projects                  []Stat  `json:"projects"`
+			Languages                 []Stat  `json:"languages"`
+			Editors                   []Stat  `json:"editors"`
+			OperatingSystems          []Stat  `json:"operating_systems"`
+			Dependencies              []Stat  `json:"dependencies"`
+			Machines                  []struct {
+				Machine struct {
+					CreatedAt  time.Time `json:"created_at"`
+					ID         string    `json:"id"`
+					IP         string    `json:"ip"`
+					LastSeenAt time.Time `json:"last_seen_at"`
+					Name       string    `json:"name"`
+					Value      string    `json:"value"`
+				} `json:"machine"`
+				Stat
+			} `json:"machines"`
+			BestDay struct {
+				Date         string  `json:"date"`
+				Text         string  `json:"text"`
+				TotalSeconds float64 `json:"total_seconds"`
+			} `json:"best_day"`
+			Range                   string    `json:"range"`
+			Holidays                int       `json:"holidays"`
+			DaysIncludingHolidays   int       `json:"days_including_holidays"`
+			DaysMinusHolidays       int       `json:"days_minus_holidays"`
+			Status                  string    `json:"status"`
+			IsAlreadyUpdating       bool      `json:"is_already_updating"`
+			IsCodingActivityVisible bool      `json:"is_coding_activity_visible"`
+			IsOtherUsageVisible     bool      `json:"is_other_usage_visible"`
+			IsStuck                 bool      `json:"is_stuck"`
+			IsUpToDate              bool      `json:"is_up_to_date"`
+			Start                   time.Time `json:"start"`
+			End                     time.Time `json:"end"`
+			Timezone                string    `json:"timezone"`
+			Timeout                 int       `json:"timeout"`
+			WritesOnly              bool      `json:"writes_only"`
+			UserID                  string    `json:"user_id"`
+			UserName                string    `json:"username"`
+			CreatedAt               time.Time `json:"created_at"`
+			ModifiedAt              time.Time `json:"modified_at"`
+		} `json:"data"`
 	}
 )
 

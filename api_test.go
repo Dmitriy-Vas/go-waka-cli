@@ -12,7 +12,7 @@ type Config struct {
 	Token string `json:"token"`
 }
 
-func TestWakaOrgs(t *testing.T) {
+func TestWakaStats(t *testing.T) {
 	data, err := ioutil.ReadFile("config.json")
 	if err != nil {
 		t.Fatal(err)
@@ -25,10 +25,10 @@ func TestWakaOrgs(t *testing.T) {
 
 	client := waka.New(cfg.Token)
 
-	orgs, err := client.Orgs()
+	stats, err := client.Stats(waka.RANGE_7_DAYS)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	fmt.Println(fmt.Sprintf("%+v", *orgs))
+	fmt.Println(fmt.Sprintf("%+v", *stats))
 }
