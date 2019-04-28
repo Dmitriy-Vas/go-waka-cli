@@ -35,18 +35,20 @@ func sendRequest(waka *WakaClient, request *http.Request) ([]byte, error) {
 		return nil, err
 	}
 	defer res.Body.Close()
-	switch res.StatusCode {
-	case http.StatusOK:
-	case http.StatusCreated:
-		break
-	default:
-		return nil, errors.New(fmt.Sprintf("Status code: %d", res.StatusCode))
-	}
 
 	data, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
+
+	switch res.StatusCode {
+	case http.StatusOK:
+	case http.StatusCreated:
+		break
+	default:
+		return nil, errors.New(fmt.Sprintf("Status code: %d.\nMessage: %s", res.StatusCode, string(data)))
+	}
+
 	return data, nil
 }
 

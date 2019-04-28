@@ -1,6 +1,8 @@
 package api
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 func (w *WakaClient) HeartbeatPost(heartbeat *Heartbeat) (*HeartbeatResponse, error) {
 	data, err := json.Marshal(heartbeat)
@@ -26,7 +28,7 @@ func (w *WakaClient) Heartbeats(data *Data) (*Heartbeats, error) {
 		return nil, err
 	}
 	var heartbeats *Heartbeats
-	if err = json.Unmarshal(bytes, heartbeats); err != nil {
+	if err = json.Unmarshal(bytes, &heartbeats); err != nil {
 		return nil, err
 	}
 	return heartbeats, nil

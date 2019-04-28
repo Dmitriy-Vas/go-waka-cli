@@ -7,34 +7,69 @@ import (
 )
 
 type (
+	// Клиент для работы с WakaTime
 	WakaClient struct {
 		client *http.Client
 		token  string
 	}
 
+	// Репрезентация даты в виде YYYY-MM-DD
 	Data struct {
 		Day   int
 		Month int
 		Year  int
 	}
 
+	Project struct {
+		// Время создания проекта
+		CreatedAt time.Time `json:"created_at"`
+		// Отформатированное название проекта
+		HTMLEscapedName string `json:"html_escaped_name"`
+		// Уникальный идентификационный номер проекта
+		ID string `json:"id"`
+		// Название проекта
+		Name string `json:"name"`
+		// Ссылка на проект для использования с WakApi
+		URL string `json:"url"`
+		// Информация о репозитории проекта
+		Repository struct {
+			// Стандартная ветвь репозитория (обычно master)
+			DefaultBranch string `json:"default_branch"`
+			// Описание проекта из репозитория
+			Description string `json:"description"`
+			// Количество копий (форков) проекта
+			ForkCount int `json:"fork_count"`
+			// Имя пользователя у кого хостится проект и название репозитория
+			FullName string `json:"full_name"`
+			// Ссылка на домащнюю страницу репозитория
+			Homepage string `json:"homepage"`
+			// Ссылка на репозиторий
+			HtmlUrl string `json:"html_url"`
+			// Уникальный идентификационный номер репозитория
+			ID string `json:"id"`
+			// Оригинал или копия
+			IsFork bool `json:"is_fork"`
+			// Приватный или публичный
+			IsPrivate bool `json:"is_private"`
+			// Время последней синхронизации с хранилищем
+			LastSyncedAt time.Time `json:"last_synced_at"`
+			// Название репозитория
+			Name string `json:"name"`
+			// Название хранилища
+			Provider string `json:"provider"`
+			// Количество звёзд репозитория
+			StarCount int `json:"star_count"`
+			// Ссылка на API репрезентацию репозитория
+			URL string `json:"url"`
+			// Количество пользователей, которые следят за репозиторием
+			WatchCount int `json:"watch_count"`
+		} `json:"repository"`
+	}
+
 	// Список проектов пользователя
 	Projects struct {
 		// Список в виде массива
-		Data []struct {
-			// Время создания проекта
-			Created time.Time `json:"created_at"`
-			// Отформатированное название проекта
-			EscapedName string `json:"html_escaped_name"`
-			// ID проекта
-			ID string `json:"id"`
-			// Название проекта
-			Name string `json:"name"`
-			// Ссылка на репозиторий проекта
-			Repository string `json:"repository"`
-			// Ссылка на проект для использования с WakApi
-			URL string `json:"url"`
-		} `json:"data"`
+		Data []Project `json:"data"`
 	}
 
 	// Пользовательская информация
@@ -43,7 +78,7 @@ type (
 			// ID пользователя
 			ID string `json:"id"`
 			// Когда был создан аккаунт
-			Created time.Time `json:"created_at"`
+			CreatedAt time.Time `json:"created_at"`
 			// Когда аккаунт был изменён
 			ModifiedAt time.Time `json:"modified_at"`
 			// Ник пользователя
@@ -51,7 +86,7 @@ type (
 			// Отображаемое имя
 			DisplayName string `json:"display_name"`
 			// Имя пользователя
-			Name string `json:"full_name"`
+			FullName string `json:"full_name"`
 			// Часовой пояс пользователя
 			Timezone string `json:"timezone"`
 			// Местонахождение пользователя
@@ -61,9 +96,9 @@ type (
 			// Публичная ли почта
 			EmailPublic bool `json:"email_public"`
 			// Подтверждён ли аккаунт
-			Confirmed bool `json:"is_email_confirmed"`
+			IsEmailConfirmed bool `json:"is_email_confirmed"`
 			// Имеется ли премиум
-			Premium bool `json:"has_premium_features"`
+			HasPremiumFeatures bool `json:"has_premium_features"`
 			// Нужно ли указать способ оплаты
 			NeedPaymentMethod bool `json:"need_payment_method"`
 			// Тариф пользователя
@@ -73,17 +108,17 @@ type (
 			// Публичное ли фото
 			PhotoPublic bool `json:"photo_public"`
 			// Публичная ли статистика по языкам программирования
-			LanguagesPublic bool `json:"languages_used_public"`
+			LanguagesUsedPublic bool `json:"languages_used_public"`
 			// Публичное ли время входа
 			LoggedTimePublic bool `json:"logged_time_public"`
 			// Ссылка на сайт пользователя
-			Site string `json:"website"`
+			Website string `json:"website"`
 			// Упрощённая ссылка на сайт пользователя
-			ReadableSite string `json:"human_readable_website"`
+			HumanReadableWebsite string `json:"human_readable_website"`
 			// Ищет ли пользователь работу
-			Hireable bool `json:"is_hireable"`
+			IsHireable bool `json:"is_hireable"`
 			// Последнее обновление статистики
-			LastBeat time.Time `json:"last_heartbeat_at"`
+			LastHeartbeatAt time.Time `json:"last_heartbeat_at"`
 			// Техническая информация о последнем использованном плагине
 			LastPlugin string `json:"last_plugin"`
 			// Название последнего использованного плагина
@@ -93,89 +128,107 @@ type (
 		} `json:"data"`
 	}
 
+	// Список коммитов из подключённого хранилища системы контроля версий
+	// Под хранилищем имеется в виду GitHub, BitBucket, GitLab, и т.д.
 	Commits struct {
+		// Список коммитов с основной информацией
 		Commits []struct {
-			AuthorAvatarURL               string    `json:"author_avatar_url"`
-			AuthorDate                    time.Time `json:"author_date"`
-			AuthorEmail                   string    `json:"author_email"`
-			AuthorHtmlUrl                 string    `json:"author_html_url"`
-			AuthorName                    string    `json:"author_name"`
-			AuthorURL                     string    `json:"author_url"`
-			AuthorUsername                string    `json:"author_username"`
-			CommitterAvatarURL            string    `json:"committer_avatar_url"`
-			CommitterDate                 time.Time `json:"committer_date"`
-			CommiterEmail                 string    `json:"committer_email"`
-			CommiterHtmlUrl               string    `json:"committer_html_url"`
-			CommiterName                  string    `json:"committer_name"`
-			CommiterURL                   string    `json:"committer_url"`
-			CommiterUsername              string    `json:"committer_username"`
-			CreatedAt                     time.Time `json:"created_at"`
-			Hash                          string    `json:"hash"`
-			HtmlUrl                       string    `json:"html_url"`
-			HumanReadableTotal            string    `json:"human_readable_total"`
-			HumanReadableTotalWithSeconds string    `json:"human_readable_total_with_seconds"`
-			ID                            string    `json:"id"`
-			Message                       string    `json:"message"`
-			Reference                     string    `json:"ref"`
-			TotalSeconds                  float64   `json:"total_seconds"`
-			TruncatedHash                 string    `json:"truncated_hash"`
-			URL                           string    `json:"url"`
+			// Ссылка на аватар автора
+			AuthorAvatarURL string `json:"author_avatar_url"`
+			// Дата создания коммита
+			AuthorDate time.Time `json:"author_date"`
+			// Почта автора
+			AuthorEmail string `json:"author_email"`
+			// Ссылка на профиль автора
+			AuthorHtmlUrl string `json:"author_html_url"`
+			// Имя автора
+			AuthorName string `json:"author_name"`
+			// Ссылка на API репрезентацию профиля автора
+			AuthorURL string `json:"author_url"`
+			// Никнейм автора
+			AuthorUsername string `json:"author_username"`
+			// todo
+			CommitterAvatarURL string `json:"committer_avatar_url"`
+			// todo
+			CommitterDate time.Time `json:"committer_date"`
+			// todo
+			CommiterEmail string `json:"committer_email"`
+			// todo
+			CommiterHtmlUrl string `json:"committer_html_url"`
+			// todo
+			CommiterName string `json:"committer_name"`
+			// todo
+			CommiterURL string `json:"committer_url"`
+			// todo
+			CommiterUsername string `json:"committer_username"`
+			// Время, когда коммит был отправлен в хранилище
+			CreatedAt time.Time `json:"created_at"`
+			// Хэш коммита
+			Hash string `json:"hash"`
+			// Ссылка на страницу с описанием коммита
+			HtmlUrl string `json:"html_url"`
+			// todo
+			HumanReadableTotal string `json:"human_readable_total"`
+			// todo
+			HumanReadableTotalWithSeconds string `json:"human_readable_total_with_seconds"`
+			// Уникальный идентификационный номер коммита
+			ID string `json:"id"`
+			// Описание коммита
+			Message string `json:"message"`
+			// todo может ветка?
+			Ref string `json:"ref"`
+			// todo
+			TotalSeconds float64 `json:"total_seconds"`
+			// Укороченный хэш коммита
+			TruncatedHash string `json:"truncated_hash"`
+			// Ссылка на API репрезентацию описания коммита
+			URL string `json:"url"`
 		} `json:"commits"`
-		Author      string `json:"author"`
-		NextPage    int    `json:"next_page"`
+		// Имя автора коммита
+		Author string `json:"author"`
+		// Номер следующай страницы
+		NextPage int `json:"next_page"`
+		// Ссылка на следующую страницу
 		NextPageURL string `json:"next_page_url"`
-		Page        int    `json:"page"`
-		PrevPage    int    `json:"prev_page"`
+		// Номер текущей страницы
+		Page int `json:"page"`
+		// Номер предыдущей страницы
+		PrevPage int `json:"prev_page"`
+		// Ссылка на предыдущую страницу
 		PrevPageURL string `json:"prev_page_url"`
-		Project     struct {
-			ID         string `json:"id"`
-			Name       string `json:"name"`
-			Privacy    string `json:"privacy"`
-			Repository struct {
-				DefaultBranch string    `json:"default_branch"`
-				Description   string    `json:"description"`
-				ForkCount     int       `json:"fork_count"`
-				FullName      string    `json:"full_name"`
-				Homepage      string    `json:"homepage"`
-				HtmlUrl       string    `json:"html_url"`
-				ID            string    `json:"id"`
-				IsFork        bool      `json:"is_fork"`
-				IsPrivate     bool      `json:"is_private"`
-				LastSyncedAt  time.Time `json:"last_synced_at"`
-				Name          string    `json:"name"`
-				Provider      string    `json:"provider"`
-				StarCount     int       `json:"star_count"`
-				URL           string    `json:"url"`
-				WatchCount    int       `json:"watch_count"`
-			} `json:"repository"`
-		} `json:"project"`
-		Status     string `json:"status"`
-		Total      int    `json:"total"`
-		TotalPages int    `json:"total_pages"`
+		// Информация о проекте
+		Project Project `json:"project"`
+		// Статус синхронизации проекта
+		Status string `json:"status"`
+		// Количество доступных страниц коммитов
+		TotalPages int `json:"total_pages"`
 	}
 
 	// Активность пользователя на выбранный день
 	Durations struct {
 		// Список веток проектов
-		Branches []string  `json:"branches"`
-		End      time.Time `json:"end"`
-		Start    time.Time `json:"start"`
-		TimeZone string    `json:"timezone"`
+		Branches []string `json:"branches"`
+		// Время окончания до которого берётся статистика
+		End time.Time `json:"end"`
+		// Время начала от которого берётся статистика
+		Start time.Time `json:"start"`
+		// Часовой пояс по которому берётся статистика
+		TimeZone string `json:"timezone"`
 		// Основная информация о затраченном времени
 		// на каждый проект
 		Data []struct {
 			// Время создания проекта
-			Created time.Time `json:"created_at"`
+			CreatedAt time.Time `json:"created_at"`
 			// Позиция курсора
-			Position string `json:"cursorpos"`
+			CursorPos string `json:"cursorpos"`
 			// Время работы над проектом в секундах
 			Duration float64 `json:"duration"`
-			// ID проекта
+			// Уникальный идентификационный номер проекта
 			ID string `json:"id"`
 			// Номер строки на которую наведён курсор
 			Lineno int `json:"lineno"`
-			// ID компьютера на котором велась работа
-			MachineID string `json:"machine_name_id"`
+			// Уникальный идентификационный номер компьютера на котором велась работа
+			MachineNameID string `json:"machine_name_id"`
 			// Название проекта
 			Project string `json:"project"`
 			// Время начала работы над проектом
@@ -185,47 +238,15 @@ type (
 		} `json:"data"`
 	}
 
-	Heartbeat struct {
-		Entity       string  `json:"entity"`
-		Type         string  `json:"type"`
-		Category     string  `json:"category"`
-		Time         float64 `json:"time"`
-		Project      string  `json:"project"`
-		Branch       string  `json:"branch"`
-		Language     string  `json:"language"`
-		Dependencies string  `json:"dependencies"`
-		Lines        int     `json:"lines"`
-		Lineno       int     `json:"lineno"`
-		Cursorpos    int     `json:"cursorpos"`
-		IsWrite      bool    `json:"is_write"`
-	}
-
-	Heartbeats struct {
-		Data     []*Heartbeat `json:"data"`
-		Start    int          `json:"start"`
-		End      int          `json:"end"`
-		Timezone string       `json:"timezone"`
-	}
-
-	HeartbeatResponse struct {
-		ID     string  `json:"id"`
-		Entity string  `json:"entity"`
-		Type   string  `json:"type"`
-		Time   float64 `json:"time"`
-	}
-
-	Range struct {
-		Date     string `json:"date"`
-		End      int    `json:"end"`
-		Start    int    `json:"start"`
-		Text     string `json:"text"`
-		Timezone string `json:"timezone"`
-	}
-
+	// Список целей пользователя
 	Goals struct {
+		// Основная информация о целях
 		Data []struct {
+			// Fail если количество не успешных дней больше чем успешных
+			// Success если успешных дней больше
 			AverageStatus string `json:"average_status"`
-			Chart         struct {
+			// todo
+			ChartData struct {
 				ActualSeconds     float64 `json:"actual_seconds"`
 				ActualSecondsText string  `json:"actual_seconds_text"`
 				GoalSeconds       int     `json:"goal_seconds"`
@@ -233,7 +254,7 @@ type (
 				Range             Range   `json:"range"`
 				RangeStatus       string  `json:"range_status"`
 				RangeStatusReason string  `json:"range_status_reason"`
-			} `json:"char_data"`
+			} `json:"chart_data"`
 			CumulativeStatus string   `json:"cumulative_status"`
 			Delta            string   `json:"delta"`
 			ID               string   `json:"id"`
@@ -257,7 +278,66 @@ type (
 		TotalPages int `json:"total_pages"`
 	}
 
-	leadersUser struct {
+	// Основная информация об откликах от плагинов
+	// либо отправленных самостоятельно
+	Heartbeat struct {
+		// Путь до проекта или домен над которым работали
+		Entity string `json:"entity"`
+		// Файл или домен над которым работали во время отклика
+		Type string `json:"type"`
+		// Категория отклика
+		Category string `json:"category"`
+		// Время начала работы над проектом в UNIX формате
+		Time float64 `json:"time"`
+		// Название проекта над которым пользователь работал
+		Project string `json:"project"`
+		// Название ветви над которой пользователь работал
+		Branch string `json:"branch"`
+		// Язык программирования, который использовался в файле отклика
+		Language string `json:"language"`
+		// Зависимости, которые были в файле отклика
+		Dependencies []string `json:"dependencies"`
+		// Количество линий в файле отклика
+		Lines int `json:"lines"`
+		// Линия, на которой был курсор во время отклика
+		Lineno int `json:"lineno,omitempty"`
+		// Позиция курсора во время отклика
+		Cursorpos int `json:"cursorpos,omitempty"`
+		// Был ли этот отклик вызван записью в файл
+		IsWrite bool `json:"is_write"`
+	}
+
+	Heartbeats struct {
+		Data []struct {
+			CreatedAt     time.Time `json:"created_at"`
+			ID            string    `json:"id"`
+			MachineNameID string    `json:"machine_name_id"`
+			UserAgentID   string    `json:"user_agent_id"`
+			UserID        string    `json:"user_id"`
+			Heartbeat
+		} `json:"data"`
+		Start    time.Time `json:"start"`
+		End      time.Time `json:"end"`
+		Timezone string    `json:"timezone"`
+	}
+
+	// Ответ
+	HeartbeatResponse struct {
+		ID     string  `json:"id"`
+		Entity string  `json:"entity"`
+		Type   string  `json:"type"`
+		Time   float64 `json:"time"`
+	}
+
+	Range struct {
+		Date     string `json:"date"`
+		End      int    `json:"end"`
+		Start    int    `json:"start"`
+		Text     string `json:"text"`
+		Timezone string `json:"timezone"`
+	}
+
+	LeadersUser struct {
 		Rank         int `json:"rank"`
 		RunningTotal struct {
 			TotalSeconds              float64 `json:"total_seconds"`
@@ -284,8 +364,8 @@ type (
 	}
 
 	Leaders struct {
-		CurrentUser leadersUser   `json:"current_user"`
-		Data        []leadersUser `json:"data"`
+		CurrentUser LeadersUser   `json:"current_user"`
+		Data        []LeadersUser `json:"data"`
 		Page        int           `json:"page"`
 		TotalPages  int           `json:"total_pages"`
 		Range       struct {
