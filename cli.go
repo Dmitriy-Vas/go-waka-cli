@@ -3,7 +3,6 @@ package go_waka_api
 import (
 	"bytes"
 	"encoding/base64"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -46,7 +45,7 @@ func sendRequest(waka *WakaClient, request *http.Request) ([]byte, error) {
 	case http.StatusCreated:
 		break
 	default:
-		return nil, errors.New(fmt.Sprintf("Status code: %d.\nMessage: %s", res.StatusCode, string(data)))
+		return nil, fmt.Errorf("Status code: %d.\nMessage: %s", res.StatusCode, string(data))
 	}
 
 	return data, nil
